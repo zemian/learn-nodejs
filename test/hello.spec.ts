@@ -1,9 +1,6 @@
-import { hello } from '../src/hello';
 import { assert } from 'chai';
+import { hello } from '../src/hello';
 
-describe('hello suite', () => {
-    it('hello test', () => {
-        const result = hello();
-        assert.equal(result, "hello");
-    });
+it('hello test', () => {
+    assert.equal(hello(), "hello");
 });
