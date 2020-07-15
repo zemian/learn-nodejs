@@ -7,6 +7,8 @@ it('enum', () => {
         Left,
         Right,
     }
+    console.log('Internal enum structure:', Direction);
+
     assert.equal(Direction.Up, 0);
     assert.equal(Direction.Down, 1);
     assert.equal(Direction.Right, Direction.Right);
