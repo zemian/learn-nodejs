@@ -2,5 +2,5 @@ node_modules/
 temp/
 .idea/
 
-*.js
 src/**/.js
+!src/js/**/*.js
