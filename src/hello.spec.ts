@@ -1,5 +1,6 @@
-import { assert } from 'chai';
-
-it('hello', () => {
-    assert.equal(1 + 1, 2);
-});
+class Hello {
+    greet() {
+        console.log("Hello");
+    }
+}
+new Hello().greet();

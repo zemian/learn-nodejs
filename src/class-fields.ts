@@ -7,7 +7,4 @@ class Foo {
         this.name = 'Foo' + Math.random();
     }
 }
-
-it("class-fields", () => {
-    console.log([new Foo(), new Foo()]);
-})
+console.log([new Foo(), new Foo()]);
