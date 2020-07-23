@@ -3,4 +3,4 @@ temp/
 .idea/
 
 src/**/.js
-!src/js/**/*.js
+src/**/.js.map
