@@ -1,6 +1,5 @@
+.DS_Store
 node_modules/
-temp/
 .idea/
 
-src/**/*.js
-src/**/*.js.map
+temp/
