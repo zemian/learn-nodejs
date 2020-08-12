@@ -13,3 +13,6 @@ fmtList.forEach(fmt => {
 		console.log(fmt.format(n));
 	});
 });
+
+// Old style?
+console.log("Number.toLocaleString", (-12329.99).toLocaleString('en-US', {style: 'currency', currency: 'USD'}));
