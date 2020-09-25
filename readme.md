@@ -1,17 +1,28 @@
 # Learning JavaScript
 
 This project explore JavaScript and TypeScript using NodeJS env. The project is
-setup with ts-node module so it can run TypeScript on command line as well. 
+setup with `ts-node` module so it can run TypeScript on command line. 
 It also has added '@types/node', so we can use it in `.ts` files to explore all 
-NodeJS modules with type information. 
+NodeJS modules with type information.
 
 Note also that in `tsconfig.json`, the TS compiler is set to generate `commonjs` 
 code, which will be runnable by node directly.
 
-## How to Compile Code
+NOTE: If you want to learn JavaScript in browser env (DOM API etc), checkout 
+the [learn-html](https://github.com/zemian/learn-html) repository instead.
 
-  npm install
-  npx tsc
+## How to Compile & Run Examples
+
+    # For any nodejs scripts, you can just run it
+    node src/nodejs/hello.js
+
+    # For TypeScript, you need to get ts-node first
+    npm install
+    npx ts-node src/ts/hello.ts
+
+    # Or to compile then run as node
+    npx tsc
+    node src/ts/hello.js
 
 ## EMACScript (ES) Versions
 
