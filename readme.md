@@ -1,11 +1,14 @@
 # Learning JavaScript
 
-This project explore JavaScript and TypeScript using NodeJS env. We installed ts-node module so we can run 
-TypeScript on command line as well. We also setup '@types/node', so we can use it in .ts file to explore all 
-NodeJS modules. Note also that in "tsconfig.json", we have set TS compiler to generate "commonjs" .js code, which
-will be runnable by node directly.
+This project explore JavaScript and TypeScript using NodeJS env. The project is
+setup with ts-node module so it can run TypeScript on command line as well. 
+It also has added '@types/node', so we can use it in `.ts` files to explore all 
+NodeJS modules with type information. 
 
-## Compile Code
+Note also that in `tsconfig.json`, the TS compiler is set to generate `commonjs` 
+code, which will be runnable by node directly.
+
+## How to Compile Code
 
   npm install
   npx tsc
