@@ -1,6 +1,2 @@
-class Hello {
-    greet() {
-        console.log("Hello");
-    }
-}
-new Hello().greet();
+let message: string = "Hello";
+console.log("message", message);
