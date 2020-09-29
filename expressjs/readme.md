@@ -1,15 +1,10 @@
-## ExpressJS
+https://expressjs.com
 
-Explore and learn about https://expressjs.com
+## How to run
 
-```
-npm install
-node hello.js
-```
+    node src/index.js
+    
+## Monitor file and auto restart node
 
-## The `serve-index` module can messup route!
-
-If you not careful, the `serve-index` can over mask the route path
-and you will see URL method not defined! The solution is to bind `serve-index`
-to specific path and avoid crash with route paths.
-
+    npm install -g nodemon
+    nodemon src/index.js
