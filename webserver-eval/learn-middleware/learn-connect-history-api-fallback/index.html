@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hello</title>
+    <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+
+<div id="app">
+    <h1>Page Info</h1>
+    <ul>
+        <li>Pathname: <code>{{ loc.pathname }}</code></li>
+        <li>Query String: <code>{{ loc.search }}</code></li>
+    </ul>
+
+    <h1>History Info</h1>
+    <ul>
+        <li>History Count: <code>{{ his.length }}</code></li>
+        <li>History State: <code>{{ JSON.stringify(his.state) }}</code></li>
+    </ul>
+</div>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            loc:  window.location,
+            his:  window.history
+        }
+    });
+</script>
+
+</body>
+</html>

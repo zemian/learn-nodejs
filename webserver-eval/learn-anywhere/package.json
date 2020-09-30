@@ -1,0 +1,15 @@
+{
+  "name": "learn-anywhere",
+  "version": "1.0.0",
+  "description": "`anywhere` is a simple web server that can serve static file server anywhere.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "anywhere": "^1.5.0"
+  }
+}

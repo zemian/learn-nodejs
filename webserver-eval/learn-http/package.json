@@ -1,0 +1,18 @@
+{
+  "name": "learn-http",
+  "version": "1.0.0",
+  "description": "node src/http-demo.js",
+  "main": "client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "finalhandler": "^1.1.2",
+    "serve-index": "^1.9.1",
+    "serve-static": "^1.14.1"
+  }
+}
