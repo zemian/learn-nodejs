@@ -1,0 +1,6 @@
+{
+	// These are default anyway!
+	"compilerOptions": {
+		"module": "commonjs",
+	},
+}
