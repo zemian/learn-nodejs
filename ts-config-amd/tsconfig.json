@@ -1,0 +1,7 @@
+{
+	// The moduleResolution will default to classic based on amd
+	// these will be usable using RequireJS type of module loading.
+	"compilerOptions": {
+		"module": "amd",
+	},
+}
