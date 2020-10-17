@@ -5,7 +5,6 @@ let app = express();
 app.use(express.static("public"));
 
 function useDB(callback) {
-  // To use MySQL8, we need to use insecureAuth=true
   let conn = mysql.createConnection({
     host: 'localhost',
     user: 'zemiannative',
