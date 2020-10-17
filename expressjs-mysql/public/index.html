@@ -1,1 +1,68 @@
-Hello index.
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employees</title>
+  <link rel="stylesheet" href="https://unpkg.com/bulma">
+</head>
+<body>
+
+  <div id="app">
+    <h1 class="title">Employees</h1>
+    <nav class="pagination is-centered">
+      <a class="pagination-previous" @click="previous">Previous</a>
+      <a class="pagination-next" @click="next">Next</a>
+    </nav>
+    <table class="table is-fullwidth">
+      <tr>
+        <td>ID</td>
+        <td>First Name</td>
+        <td>Last Name</td>
+      </tr>
+      <tr v-for="emp in employees">
+        <td>{{ emp.emp_no }}</td>
+        <td>{{ emp.first_name }}</td>
+        <td>{{ emp.last_name }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <script src="https://unpkg.com/vue"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        employees: [],
+        page: 1,
+        pageSize: 20,
+      },
+      created: function () {
+        this.fetchEmployees();
+      },
+      methods: {
+        fetchEmployees: function () {
+          let limit = this.pageSize;
+          let offset = (this.page - 1) * limit;
+          fetch (`/employees?offset=${offset}&limit=${limit}`).then(resp => resp.json()).then(data => {
+            console.log("Got " + data.length + " items");
+            this.employees = data;
+          });
+        },
+        previous: function () {
+          console.log("Fetching previous page data");
+          if (this.page <= 1)
+            return;
+          this.page--;
+          this.fetchEmployees();
+        },
+        next: function () {
+          console.log("Fetching next page data");
+          if (this.employees.length === 0)
+            return;
+          this.page++;
+          this.fetchEmployees();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
