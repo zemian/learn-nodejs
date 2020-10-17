@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Directory Listing</title>
+  <link rel="stylesheet" href="https://unpkg.com/bulma">
+</head>
+<body>
+
+  <div id="app" class="section">
+    <h1 class="title">Directory Listing</h1>
+    <ul class="panel">
+      <li class="panel-block" v-for="file in files">{{ file }}</li>
+    </ul>
+  </div>
+
+  <script src="https://unpkg.com/vue"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        files: []
+      },
+      created: function () {
+        fetch (`/json/dir-listing`).then(resp => resp.json()).then(data => {
+          console.log("Got " + data.length + " items");
+          this.files = data;
+        });
+      }
+    });
+  </script>
+</body>
+</html>
