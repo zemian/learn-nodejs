@@ -18,10 +18,10 @@
         <td>First Name</td>
         <td>Last Name</td>
       </tr>
-      <tr v-for="emp in employees">
-        <td>{{ emp.emp_no }}</td>
-        <td>{{ emp.first_name }}</td>
-        <td>{{ emp.last_name }}</td>
+      <tr v-for="item in list">
+        <td>{{ item.emp_no }}</td>
+        <td>{{ item.first_name }}</td>
+        <td>{{ item.last_name }}</td>
       </tr>
     </table>
   </div>
@@ -31,20 +31,20 @@
     new Vue({
       el: '#app',
       data: {
-        employees: [],
+        list: [],
         page: 1,
         pageSize: 20,
       },
       created: function () {
-        this.fetchEmployees();
+        this.fetchList();
       },
       methods: {
-        fetchEmployees: function () {
+        fetchList: function () {
           let limit = this.pageSize;
           let offset = (this.page - 1) * limit;
           fetch (`/employees?offset=${offset}&limit=${limit}`).then(resp => resp.json()).then(data => {
             console.log("Got " + data.length + " items");
-            this.employees = data;
+            this.list = data;
           });
         },
         previous: function () {
@@ -52,14 +52,14 @@
           if (this.page <= 1)
             return;
           this.page--;
-          this.fetchEmployees();
+          this.fetchList();
         },
         next: function () {
           console.log("Fetching next page data");
-          if (this.employees.length === 0)
+          if (this.list.length === 0)
             return;
           this.page++;
-          this.fetchEmployees();
+          this.fetchList();
         }
       }
     });
