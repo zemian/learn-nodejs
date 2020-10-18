@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GitHub API Demo</title>
+  <link rel="stylesheet" href="https://unpkg.com/bulma">
+  <script src="http://localhost:35729/livereload.js?snipver=1"></script>
+</head>
+<body>
+
+  <div id="app" class="section">
+    <h1 class="title">GitHub API Demo</h1>
+    <nav class="pagination">
+      <a class="pagination-previous" @click="previous">Previous</a>
+      <a class="pagination-next" @click="next">Next</a>
+    </nav>
+    <table class="table is-fullwidth">
+      <tr>
+        <td>Commit</td>
+        <td>Name</td>
+        <td>Email</td>
+        <td>Date</td>
+        <td>Message</td>
+      </tr>
+      <tr v-for="item in list">
+        <td>{{ item.sha | shortsha }}</td>
+        <td>{{ item.commit.author.name }}</td>
+        <td>{{ item.commit.author.email }}</td>
+        <td>{{ item.commit.author.date }}</td>
+        <td>{{ item.commit.message }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <script src="https://unpkg.com/vue"></script>
+  <script>
+    Vue.filter('shortsha', function(text, len = 8) {
+      return text.substring(0, len);
+    });
+    new Vue({
+      el: '#app',
+      data: {
+        list: [],
+        page: 1,
+        pageSize: 20,
+      },
+      created: function () {
+        this.fetchList();
+      },
+      methods: {
+        fetchList: function () {
+          let options = {
+            headers: {
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          };
+          let url = `https://api.github.com/repos/vuejs/vue/commits?per_page=${this.pageSize}&page=${this.page}`;
+          fetch(url, options).then(resp => resp.json()).then(data => {
+            console.log("Got " + data.length + " items");
+            this.list = data;
+          });
+        },
+        previous: function () {
+          console.log("Fetching previous page data");
+          if (this.page <= 1)
+            return;
+          this.page--;
+          this.fetchList();
+        },
+        next: function () {
+          console.log("Fetching next page data");
+          if (this.list.length === 0)
+            return;
+          this.page++;
+          this.fetchList();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
