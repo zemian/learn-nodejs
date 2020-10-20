@@ -3,16 +3,22 @@ const ejs = require('ejs');
 const express = require('express');
 const app = express();
 
+let template = `
+<h1>Hello <%= name %></h1>
+<ul>
+    <% for (fruit of fruits) { %>
+        <li> <%= fruit %></li>
+    <% } %>
+</ul>
+`;
+
 app.get('/', (req, res) => {
-    let template = req.query['template'] || 'hello.ejs';
     let data = {
         name: "World",
         fruits: ['apple', 'orange', 'banana']
     }
-    const dir = __dirname;
-    ejs.renderFile(dir + `/templates/${template}`, data, {}, (err, result) => {
-        res.send(result);
-    });
+    result = ejs.render(template, data);
+    res.send(result);
 });
 
 const port = 3000;
