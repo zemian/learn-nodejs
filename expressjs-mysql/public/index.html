@@ -22,12 +22,20 @@
         <td>{{ item.emp_no }}</td>
         <td>{{ item.first_name }}</td>
         <td>{{ item.last_name }}</td>
+        <td>{{ item.gender }}</td>
+        <td>{{ item.birth_date | localeDate }}</td>
+        <td>{{ item.hire_date | localeDate }}</td>
       </tr>
     </table>
   </div>
 
   <script src="https://unpkg.com/vue"></script>
   <script>
+    Vue.filter('localeDate', function(value) {
+      if (value) {
+        return new Date(value).toLocaleDateString();
+      }
+    });
     new Vue({
       el: '#app',
       data: {
@@ -42,7 +50,7 @@
         fetchList: function () {
           let limit = this.pageSize;
           let offset = (this.page - 1) * limit;
-          fetch (`/employees?offset=${offset}&limit=${limit}`).then(resp => resp.json()).then(data => {
+          fetch (`/employees/list?offset=${offset}&limit=${limit}`).then(resp => resp.json()).then(data => {
             console.log("Got " + data.length + " items");
             this.list = data;
           });

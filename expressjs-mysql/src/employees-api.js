@@ -16,11 +16,11 @@ function useDB(callback) {
   conn.end();
 }
 
-app.get("/", (req, res) => {
+app.get("/employees/list", (req, res) => {
   useDB(conn => {
     let limit = Number(req.query.limit || '10');
     let offset = Number(req.query.offset || '0');
-    let sql = 'SELECT * FROM employees ORDER BY last_name LIMIT ?, ?';
+    let sql = 'SELECT * FROM employees ORDER BY hire_date DESC LIMIT ?, ?';
     console.log("Query " + sql);
     console.log("Parameters: ", [offset, limit]);
     conn.query(sql, [offset, limit], function (error, result) {
