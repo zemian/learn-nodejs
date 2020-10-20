@@ -16,7 +16,7 @@ function useDB(callback) {
   conn.end();
 }
 
-app.get("/employees", (req, res) => {
+app.get("/", (req, res) => {
   useDB(conn => {
     let limit = Number(req.query.limit || '10');
     let offset = Number(req.query.offset || '0');
