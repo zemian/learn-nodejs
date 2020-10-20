@@ -1,17 +1,17 @@
-const ejs = require('ejs');
+// Render output using 'views/' with expressjs view engine
+
 const express = require('express');
 const app = express();
 
+app.set('views', './views');
+app.set('view engine', 'ejs');
+
 app.get('/', (req, res) => {
-    let template = req.query['template'] || 'hello.ejs';
     let data = {
         name: "World",
         fruits: ['apple', 'orange', 'banana']
     }
-    const dir = __dirname;
-    ejs.renderFile(dir + `/templates/${template}`, data, {}, (err, result) => {
-        res.send(result);
-    });
+    res.render('index', data);
 });
 
 const port = 3000;
