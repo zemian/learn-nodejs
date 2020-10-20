@@ -7,70 +7,9 @@
 <body>
 
   <div id="app" class="section">
-    <h1 class="title">Employees</h1>
-    <nav class="pagination">
-      <a class="pagination-previous" @click="previous">Previous</a>
-      <a class="pagination-next" @click="next">Next</a>
-    </nav>
-    <table class="table is-fullwidth">
-      <tr>
-        <td>ID</td>
-        <td>First Name</td>
-        <td>Last Name</td>
-      </tr>
-      <tr v-for="item in list">
-        <td>{{ item.emp_no }}</td>
-        <td>{{ item.first_name }}</td>
-        <td>{{ item.last_name }}</td>
-        <td>{{ item.gender }}</td>
-        <td>{{ item.birth_date | localeDate }}</td>
-        <td>{{ item.hire_date | localeDate }}</td>
-      </tr>
-    </table>
+    <div class="panel">
+        <a class="panel-block" href="employees/list.html">Employees</a>
+    </div>
   </div>
-
-  <script src="https://unpkg.com/vue"></script>
-  <script>
-    Vue.filter('localeDate', function(value) {
-      if (value) {
-        return new Date(value).toLocaleDateString();
-      }
-    });
-    new Vue({
-      el: '#app',
-      data: {
-        list: [],
-        page: 1,
-        pageSize: 20,
-      },
-      created: function () {
-        this.fetchList();
-      },
-      methods: {
-        fetchList: function () {
-          let limit = this.pageSize;
-          let offset = (this.page - 1) * limit;
-          fetch (`/employees/list?offset=${offset}&limit=${limit}`).then(resp => resp.json()).then(data => {
-            console.log("Got " + data.length + " items");
-            this.list = data;
-          });
-        },
-        previous: function () {
-          console.log("Fetching previous page data");
-          if (this.page <= 1)
-            return;
-          this.page--;
-          this.fetchList();
-        },
-        next: function () {
-          console.log("Fetching next page data");
-          if (this.list.length === 0)
-            return;
-          this.page++;
-          this.fetchList();
-        }
-      }
-    });
-  </script>
 </body>
 </html>

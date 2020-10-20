@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employees</title>
+  <link rel="stylesheet" href="https://unpkg.com/bulma">
+</head>
+<body>
+
+  <div id="app" class="section">
+    <div class="block">
+        <a class="button" href="list.html">Back</a>
+    </div>
+    <h1 class="title">New Employee</h1>
+    <div id="message" v-if="message" :class="messageClass">
+        {{message}}
+    </div>
+    <div>
+        <div class="field">
+            <label class="label">Employee No</label>
+            <div class="control"><input class="input" name="emp_no" v-model="form.emp_no"></div>
+        </div>
+        <div class="field">
+            <label class="label">First Name</label>
+            <div class="control"><input class="input" name="first_name" v-model="form.first_name"></div>
+        </div>
+        <div class="field">
+            <label class="label">Last Name</label>
+            <div class="control"><input class="input" name="last_name" v-model="form.last_name"></div>
+        </div>
+        <div class="field">
+            <label class="label">Gender</label>
+            <div class="control"><input class="input" name="gender" v-model="form.gender"></div>
+        </div>
+        <div class="field">
+            <label class="label">Birth Date</label>
+            <div class="control"><input class="input" name="birth_date" v-model="form.birth_date"></div>
+        </div>
+        <div class="field">
+            <label class="label">Hire Date</label>
+            <div class="control"><input class="input" name="hire_date" v-model="form.hire_date"></div>
+        </div>
+        <div class="field">
+            <div class="control"><button class="button" @click="submit">Submit</button></div>
+        </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        message: '',
+        messageClass: 'notification',
+        form: {
+            emp_no: '',
+            first_name: '',
+            last_name: '',
+            gender: '',
+            birth_date: '',
+            hire_date: ''
+        }
+      },
+      methods: {
+        submit: function() {
+            let data = JSON.stringify(this.form);
+            console.log("Submiting data", data);
+            let url = `/employees/new`;
+            let options = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: data
+            };
+            fetch(url, options)
+                .then(resp => resp.json())
+                .then(data => {
+                    console.log("Submit result", data);
+                    if (data.status === "successful") {
+                        this.message = "New employee created";
+                        this.messageClass = "notification";
+                    } else {
+                        this.message = data.message;
+                        this.messageClass = "notification is-danger";
+                    }
+                });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
