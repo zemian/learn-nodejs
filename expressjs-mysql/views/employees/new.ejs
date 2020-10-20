@@ -1,0 +1,39 @@
+<%- include('header.ejs') %>
+
+<div class="section">
+    <div class="block">
+        <a class="button" href="/">Back</a>
+    </div>
+    <h1 class="title">New Employee</h1>
+    <form action="/new" method="POST">
+        <div class="field">
+            <label class="label">Employee No</label>
+            <div class="control"><input class="input" name="emp_no"></div>
+        </div>
+        <div class="field">
+            <label class="label">First Name</label>
+            <div class="control"><input class="input" name="first_name"></div>
+        </div>
+        <div class="field">
+            <label class="label">Last Name</label>
+            <div class="control"><input class="input" name="last_name"></div>
+        </div>
+        <div class="field">
+            <label class="label">Gender</label>
+            <div class="control"><input class="input" name="gender"></div>
+        </div>
+        <div class="field">
+            <label class="label">Birth Date</label>
+            <div class="control"><input class="input" name="birth_date"></div>
+        </div>
+        <div class="field">
+            <label class="label">Hire Date</label>
+            <div class="control"><input class="input" name="hire_date"></div>
+        </div>
+        <div class="field">
+            <div class="control"><input class="button" type="submit" value="Submit"></div>
+        </div>
+    </form>
+</div>
+
+<%- include('footer.ejs') %>
