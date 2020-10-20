@@ -20,10 +20,10 @@ function useDB(callback) {
 }
 
 app.get('/', (req, res) => {
-    res.redirect('/list');
+    res.redirect('/employees/list');
 });
 
-app.get('/list', (req, res) => {
+app.get('/employees/list', (req, res) => {
     useDB(conn => {
         let offset = Number(req.query.offset || '0');
         let limit = Number(req.query.limit || '10');
@@ -41,10 +41,10 @@ app.get('/list', (req, res) => {
     });
 });
 
-app.get('/new', (req, res) => {
+app.get('/employees/new', (req, res) => {
     res.render('employees/new');
 });
-app.post('/new', (req, res) => {
+app.post('/employees/new', (req, res) => {
     let form = req.body;
     //console.log("Form submitted", form);
     useDB(conn => {
