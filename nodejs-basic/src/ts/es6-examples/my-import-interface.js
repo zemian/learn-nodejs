@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const my_export_1 = require("./my-export");
+console.log(my_export_1.Hello);
+class MyStringValidator {
+    isAcceptable(s) {
+        return false;
+    }
+}
+let a = new MyStringValidator();
+console.log(a);
