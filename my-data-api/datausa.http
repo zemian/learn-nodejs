@@ -1,0 +1,7 @@
+https://datausa.io/api/data
+
+###
+https://datausa.io/api/data?drilldowns=Nation&measures=Population
+
+###
+https://datausa.io/api/data?drilldowns=State&measures=Population&year=latest

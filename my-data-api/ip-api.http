@@ -1,0 +1,7 @@
+GET http://ip-api.com/json/24.48.0.1
+
+#> {% client.log('Response: country=' + response.body.country); %}
+
+###
+# SSL unavailable for this endpoint
+GET https://ip-api.com/json/24.48.0.1

@@ -1,0 +1,14 @@
+#
+# https://docs.github.com/en/rest/overview/endpoints-available-for-github-apps
+#
+
+###
+https://api.github.com/
+
+###
+https://api.github.com/repos/octocat/hello-world
+
+###
+# Trending Repos - Repos Search
+# https://stackoverflow.com/questions/30525330/how-to-get-list-of-trending-github-repositories-by-github-api
+https://api.github.com/search/repositories?sort=stars&order=desc&q=language:java&q=created:>2021-01-01
