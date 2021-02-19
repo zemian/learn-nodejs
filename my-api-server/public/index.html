@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>My API Server</title>
-    <link rel="stylesheet" href="https://unpkg.com/bulma">
-    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.2/css/bulma.css">
+    <script src="https://unpkg.com/vue@2.6.12/dist/vue.js"></script>
 </head>
 <body>
 
@@ -19,24 +19,34 @@
 
 <div class="section" id="app">
     <div class="container">
-        <nav class="panel">
+        <div class="panel" v-if="!error">
             <p class="panel-heading">
                 Endpoints
             </p>
-            <a class="panel-block" v-for="item in endpoints" :key="item.url" :href="item.url">
-                {{item.url}}
+            <a class="panel-block" v-for="item in endpoints" :key="item.path" :href="item.path">
+                {{item.method.toUpperCase()}} {{item.path}}
             </a>
-        </nav>
+        </div>
+        <div class="notification is-danger" v-else>{{error}}</div>
     </div>
 </div>
 <script>
     new Vue({
         data() {
             return {
-                endpoints: [
-                    {url: '/hello'}
-                ]
+                error: '',
+                endpoints: []
             }
+        },
+        created() {
+            let endpointUrl = '/endpoints';
+            fetch(endpointUrl).then(resp => resp.json()).then(data => {
+                // console.log("Received ", data);
+                this.endpoints = data;
+            }).catch(error => {
+                console.error("Failed to get " + endpointUrl, error);
+                this.error = `Failed to get ${endpointUrl} from server. Is it running?`;
+            });
         }
     }).$mount('#app');
 </script>
