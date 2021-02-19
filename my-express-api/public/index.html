@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My API Server</title>
+    <link rel="stylesheet" href="https://unpkg.com/bulma">
+    <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+
+<div class="hero is-primary">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">API Server</h1>
+            <h2 class="subtitle">Discover API endpoints that power your beautiful apps.</h2>
+        </div>
+    </div>
+</div>
+
+<div class="section" id="app">
+    <div class="container">
+        <nav class="panel">
+            <p class="panel-heading">
+                Endpoints
+            </p>
+            <a class="panel-block" v-for="item in endpoints" :key="item.url" :href="item.url">
+                {{item.url}}
+            </a>
+        </nav>
+    </div>
+</div>
+<script>
+    new Vue({
+        data() {
+            return {
+                endpoints: [
+                    {url: '/hello'}
+                ]
+            }
+        }
+    }).$mount('#app');
+</script>
+
+<div class="footer">
+    <p>Got Questions? Contact zemiandeng@gmail.com</p>
+    <p>This server is powered by ExpressJS and it is for testing purpose only.</p>
+</div>
+
+</body>
+</html>
