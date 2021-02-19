@@ -23,8 +23,8 @@
             <p class="panel-heading">
                 Endpoints
             </p>
-            <a class="panel-block" v-for="item in endpoints" :key="item.path" :href="item.path">
-                {{item.method.toUpperCase()}} {{item.path}}
+            <a class="panel-block" v-for="item in endpoints" :key="item.key" :href="item.path">
+                {{item.methods.join(', ')}} {{item.path}}
             </a>
         </div>
         <div class="notification is-danger" v-else>{{error}}</div>
