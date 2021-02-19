@@ -1,20 +1,23 @@
+###
 GET http://localhost:3000/messages
 
 ###
-POST http://localhost:3000/message
+GET http://localhost:3000/messages/1
+
+###
+POST http://localhost:3000/messages
 content-type: application/json
 
 {"name": "Tester1", "email": "tester1@zemian.com", "message": "Just a test #4."}
 
 ###
-
-PUT http://localhost:3000/message
+PUT http://localhost:3000/messages
 content-type: application/json
 
 {"id": 1, "name": "Tester1", "email": "tester1@zemian.com", "message": "Updating msg."}
 
 ###
-DELETE http://localhost:3000/message
+DELETE http://localhost:3000/messages
 content-type: application/json
 
 {"id": 1}

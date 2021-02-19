@@ -10,30 +10,77 @@
 ## How to test with curl (use `-v` to see headers for debugging):
 
   GET
-  curl http://localhost:3000
+  curl http://localhost:3000/messages
 
   POST
-  curl -H "content-type: application/json" -d '{"name": "Tester1", "email": "tester1@zemian.com", "message": "Just a test #4."}' http://localhost:3000/message
+  curl -H "content-type: application/json" -d '{"name": "Tester1", "email": "tester1@zemian.com", "message": "Just a test #4."}' http://localhost:3000/messages
 
   PUT
-  curl -X PUT -H "content-type: application/json" -d '{"id": 1, "name": "Tester1", "email": "tester1@zemian.com", "message": "Updating msg."}' http://localhost:3000/message
+  curl -X PUT -H "content-type: application/json" -d '{"id": 1, "name": "Tester1", "email": "tester1@zemian.com", "message": "Updating msg."}' http://localhost:3000/messages
 
   DELETE
-  curl -X DELETE -H "content-type: application/json" -d '{"id": 1}' http://localhost:3000/message
+  curl -X DELETE -H "content-type: application/json" -d '{"id": 1}' http://localhost:3000/messages
 
 NOTE: By default the `curl -d` will send post as `content-type=application/x-www-form-urlencoded` (like an html form), so you need to set the `content-type` header explicitly to change the data type. This affect how the server will receive the data.
 
  */
 const express = require('express');
+const sqlite3 = require('sqlite3');
+
 const router = express.Router();
 
-const dataStore = {
-  messages: [
-    {id: 1, name: "Tester1", email: "tester1@zemian.com", message: "Just a test #1."},
-    {id: 2, name: "Tester2", email: "tester2@zemian.com", message: "Just a test #2."},
-    {id: 3, name: "Tester1", email: "tester1@zemian.com", message: "Just a test #3."}
-  ]
-};
+class DataStore {
+  db = new sqlite3.Database('db/my-api-server.sqlite');
+
+  getAllMessages(callback) {
+    this.db.all('SELECT * FROM messages', callback);
+  }
+
+  getMessage(id, callback) {
+    this.db.get('SELECT * FROM messages WHERE id = ?', [id], callback);
+  }
+
+  createMessage(message, callback) {
+    //NOTE: The callback must be a function in order to use "this.lastID" ! A fat arrow
+    // function will not work!
+    this.db.run('INSERT INTO messages (name, email, message) VALUES (?, ?, ?)',
+        [message.name, message.email, message.message],
+        function (err) {
+          //console.log("INSERT", this, this.lastID, err);
+          message.id = this.lastID;
+          callback(err, message);
+        });
+  }
+
+  deleteMessage(id, callback) {
+    this.db.get('SELECT * FROM messages WHERE id = ?', [id], (err, row) => {
+      this.db.run('DELETE FROM messages WHERE id = ?',
+          [id],
+          function (err) {
+            if (this.changes)
+              callback(err, row);
+          });
+    });
+  }
+
+  updateMessage(message, callback) {
+    this.db.run('UPDATE messages set name = ?, email = ?, message = ? WHERE id = ?',
+        [message.name, message.email, message.message, message.id],
+        function (err) {
+          if (this.changes)
+            callback(err, message);
+        });
+  }
+
+  close() {
+    this.db.close();
+  }
+}
+DataStore.withDataStore = function (callback) {
+  let dataStore = new DataStore();
+  callback(dataStore);
+  dataStore.close();
+}
 
 // ## Handle post body parsing (using `req.body`)
 // Case 1: Handle "Content-Type: application/json"
@@ -45,20 +92,22 @@ router.use(express.urlencoded({ extended: true })); // true = use qs library to 
 router.get('/', (req, res) => {
   console.log("Handling GET request - get all");
   //console.log("headers", req.headers);
-  res.json(dataStore.messages);
+
+  DataStore.withDataStore(dataStore => {
+    dataStore.getAllMessages((err, rows) => res.json({items: rows, count: rows.length, isMore: false}));
+  });
 });
 
 router.get('/:id', (req, res) => {
   console.log("Handling GET request - get by id", req.params.id);
   //console.log("headers", req.headers);
   const id = Number(req.params.id);
-  const msg = dataStore.messages.find(e => e.id === id);
-  // console.log("msg", msg);
-  if (!msg) {
-    res.json({error: "id " + id + " not found."});
-  } else {
-    res.json(msg);
-  }
+
+  DataStore.withDataStore(dataStore => {
+    dataStore.getMessage(id, (err, row) => {
+      res.json(row);
+    });
+  });
 });
 
 router.post('/', (req, res) => {
@@ -66,9 +115,12 @@ router.post('/', (req, res) => {
   //console.log("headers", req.headers);
   // console.log("body", req.body);
   const msg = req.body;
-  msg.id = dataStore.messages.length + 1; // Poorman id generator
-  dataStore.messages.push(msg);
-  res.json(msg);
+
+  DataStore.withDataStore(dataStore => {
+    dataStore.createMessage(msg, (err, row) => {
+      res.json(row);
+    });
+  });
 });
 
 router.put('/', (req, res) => {
@@ -76,13 +128,11 @@ router.put('/', (req, res) => {
   //console.log("headers", req.headers);
   // console.log("body", req.body);
   const msg = req.body;
-  const existingMsg = dataStore.messages.find(e => e.id === msg.id);
-  if (!existingMsg) {
-    res.json({error: "id " + msg.id + " not found."});
-  } else {
-    Object.assign(existingMsg, msg);
-    res.json(msg);
-  }
+  DataStore.withDataStore(dataStore => {
+    dataStore.updateMessage(msg, (err, row) => {
+      res.json(row);
+    });
+  });
 });
 
 router.delete('/', (req, res) => {
@@ -90,14 +140,11 @@ router.delete('/', (req, res) => {
   //console.log("headers", req.headers);
   // console.log("body", req.body);
   const msg = req.body;
-  const existingMsg = dataStore.messages.find(e => e.id === msg.id);
-  if (!existingMsg) {
-    res.json({error: "id " + msg.id + " not found."});
-  } else {
-    // Delete by filter out element
-    dataStore.messages = dataStore.messages.filter(e => e.id !== msg.id);
-    res.json(existingMsg);
-  }
+  DataStore.withDataStore(dataStore => {
+    dataStore.deleteMessage(msg.id, (err, row) => {
+      res.json(row);
+    });
+  });
 });
 
 module.exports = router;
