@@ -6,7 +6,7 @@ const sqlite3 = require('sqlite3').verbose();
 
 describe("sqlite3-filedb", function () {
     it("app_options", function () {
-        let db = new sqlite3.Database('my-vue-app.sqlite');
+        let db = new sqlite3.Database('my-api-server-test.sqlite');
         assert(db);
         db.serialize(function() {
             console.log("Creating table");

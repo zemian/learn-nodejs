@@ -1,5 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
-let db = new sqlite3.Database('my-vue-app.sqlite');
+let db = new sqlite3.Database('my-api-server-test.sqlite');
 db.serialize(function() {
     console.log("Creating sample data");
     let stmt = db.prepare("INSERT INTO app_options (name, value) VALUES (?, ?)");
