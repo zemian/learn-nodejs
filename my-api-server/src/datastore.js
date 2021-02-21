@@ -1,5 +1,6 @@
 const sqlite3 = require('sqlite3');
 
+//TODO: Can we improve this to use Promise instead of callback?
 class DataStore {
   db = new sqlite3.Database('db/my-api-server.sqlite');
 
