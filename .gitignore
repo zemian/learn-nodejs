@@ -6,3 +6,5 @@ node_modules/
 src/ts/**/*.js
 
 package-lock.json
+
+.env

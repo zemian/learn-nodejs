@@ -1,9 +1,11 @@
 const express = require('express');
+const appEnv = require('./app-env.js');
 const messages = require('./messages.js');
-const app = express();
 
-app.use(express.static("public"));
+const app = express();
+app.use('/env', appEnv);
 app.use('/messages', messages);
+app.use(express.static("public"));
 
 app.get("/hello", (req, res) => {
     res.send("Hello");
@@ -38,6 +40,7 @@ app.get("/endpoints", (req, res) => {
     }
 
     // Extract endpoints from a router
+    ret.push(...getEndpoints('/env', messages));
     ret.push(...getEndpoints('/messages', messages));
 
     // Return all endpoints
