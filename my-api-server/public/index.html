@@ -23,8 +23,8 @@
             <p class="panel-heading">
                 Endpoints
             </p>
-            <a class="panel-block" v-for="item in endpoints" :key="item.key" :href="item.path">
-                {{item.methods.join(', ')}} {{item.path}}
+            <a class="panel-block" v-for="item in endpoints" :key="item.path" :href="item.path">
+                {{item.method}} {{item.path}}
             </a>
         </div>
         <div class="notification is-danger" v-else>{{error}}</div>
@@ -42,7 +42,7 @@
             let endpointUrl = '/endpoints';
             fetch(endpointUrl).then(resp => resp.json()).then(data => {
                 // console.log("Received ", data);
-                this.endpoints = data;
+                this.endpoints = data.endpoints;
             }).catch(error => {
                 console.error("Failed to get " + endpointUrl, error);
                 this.error = `Failed to get ${endpointUrl} from server. Is it running?`;

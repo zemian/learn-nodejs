@@ -1,0 +1,11 @@
+{
+  "endpoints": [
+    { "path": "/hello", "method": "GET" },
+    { "path": "/env", "method": "GET" },
+    { "path": "/messages", "method": "GET" },
+    { "path": "/messages/:id", "method": "GET" },
+    { "path": "/messages", "method": "POST" },
+    { "path": "/messages", "method": "PUT" },
+    { "path": "/messages", "method": "DELETE" }
+  ]
+}
