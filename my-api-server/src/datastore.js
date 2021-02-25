@@ -5,7 +5,7 @@ class DataStore {
     db = new sqlite3.Database('db/my-api-server.sqlite');
 
     getAllMessages(callback) {
-        this.db.all('SELECT * FROM messages', callback);
+        this.db.all('SELECT * FROM messages ORDER BY create_ts DESC', callback);
     }
 
     getMessage(id, callback) {
