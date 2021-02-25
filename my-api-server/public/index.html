@@ -8,26 +8,43 @@
 </head>
 <body>
 
-<div class="hero is-primary">
-    <div class="hero-body">
-        <div class="container">
-            <h1 class="title">API Server</h1>
-            <h2 class="subtitle">Discover API endpoints that power your beautiful apps.</h2>
+<div id="app">
+    <div class="hero is-primary">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title"><a href="/index.html">API Server</a></h1>
+                <h2 class="subtitle">Discover API endpoints that power your beautiful apps.</h2>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="section" id="app">
-    <div class="container">
-        <div class="panel" v-if="!error">
-            <p class="panel-heading">
-                Endpoints
-            </p>
-            <a class="panel-block" v-for="item in endpoints" :key="item.path" :href="item.path">
-                {{item.method}} {{item.path}}
-            </a>
+    <div class="section">
+        <div class="container">
+            <div class="panel">
+                <p class="panel-heading">
+                    UI Apps
+                </p>
+                <a class="panel-block" href="index.html">Home</a>
+                <a class="panel-block" href="messages.html">Messages</a>
+            </div>
+
+            <div class="panel">
+                <p class="panel-heading">
+                    Endpoints
+                </p>
+                <div v-if="!error"></div>
+                    <a class="panel-block" v-for="item in endpoints" :key="item.path" :href="item.path">
+                        {{item.method}} {{item.path}}
+                    </a>
+                </div>
+                <div class="notification is-danger" v-else>{{error}}</div>
+            </div>
         </div>
-        <div class="notification is-danger" v-else>{{error}}</div>
+    </div>
+
+    <div class="section">
+        <div class="container">
+        </div>
     </div>
 </div>
 <script>
