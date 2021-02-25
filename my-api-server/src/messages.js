@@ -34,64 +34,64 @@ const router = express.Router();
 router.use(express.json());
 // Case 2: Handle "Content-Type: application/x-www-form-urlencoded"
 // NOTE: You would need to parse the req.body as string
-router.use(express.urlencoded({ extended: true })); // true = use qs library to parse
+router.use(express.urlencoded({extended: true})); // true = use qs library to parse
 
 router.get('/', (req, res) => {
-  console.log("Handling GET request - get all");
-  //console.log("headers", req.headers);
+    console.log("Handling GET request - get all");
+    //console.log("headers", req.headers);
 
-  DataStore.withDataStore(dataStore => {
-    dataStore.getAllMessages((err, rows) => res.json({items: rows, count: rows.length, isMore: false}));
-  });
+    DataStore.withDataStore(dataStore => {
+        dataStore.getAllMessages((err, rows) => res.json({items: rows, count: rows.length, isMore: false}));
+    });
 });
 
 router.get('/:id', (req, res) => {
-  console.log("Handling GET request - get by id", req.params.id);
-  //console.log("headers", req.headers);
-  const id = Number(req.params.id);
+    console.log("Handling GET request - get by id", req.params.id);
+    //console.log("headers", req.headers);
+    const id = Number(req.params.id);
 
-  DataStore.withDataStore(dataStore => {
-    dataStore.getMessage(id, (err, row) => {
-      res.json(row);
+    DataStore.withDataStore(dataStore => {
+        dataStore.getMessage(id, (err, row) => {
+            res.json(row);
+        });
     });
-  });
 });
 
 router.post('/', (req, res) => {
-  console.log("Handling POST request");
-  //console.log("headers", req.headers);
-  // console.log("body", req.body);
-  const msg = req.body;
+    console.log("Handling POST request");
+    //console.log("headers", req.headers);
+    // console.log("body", req.body);
+    const msg = req.body;
 
-  DataStore.withDataStore(dataStore => {
-    dataStore.createMessage(msg, (err, row) => {
-      res.json(row);
+    DataStore.withDataStore(dataStore => {
+        dataStore.createMessage(msg, (err, row) => {
+            res.json(row);
+        });
     });
-  });
 });
 
 router.put('/', (req, res) => {
-  console.log("Handling PUT request");
-  //console.log("headers", req.headers);
-  // console.log("body", req.body);
-  const msg = req.body;
-  DataStore.withDataStore(dataStore => {
-    dataStore.updateMessage(msg, (err, row) => {
-      res.json(row);
+    console.log("Handling PUT request");
+    //console.log("headers", req.headers);
+    // console.log("body", req.body);
+    const msg = req.body;
+    DataStore.withDataStore(dataStore => {
+        dataStore.updateMessage(msg, (err, row) => {
+            res.json(row);
+        });
     });
-  });
 });
 
 router.delete('/', (req, res) => {
-  console.log("Handling DELETE request");
-  //console.log("headers", req.headers);
-  // console.log("body", req.body);
-  const msg = req.body;
-  DataStore.withDataStore(dataStore => {
-    dataStore.deleteMessage(msg.id, (err, row) => {
-      res.json(row);
+    console.log("Handling DELETE request");
+    //console.log("headers", req.headers);
+    // console.log("body", req.body);
+    const msg = req.body;
+    DataStore.withDataStore(dataStore => {
+        dataStore.deleteMessage(msg.id, (err, row) => {
+            res.json(row);
+        });
     });
-  });
 });
 
 module.exports = router;

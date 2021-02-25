@@ -22,50 +22,224 @@
 
     <div class="section">
         <div class="container">
-            <h1 class="title">Messages</h1>
+            <h1 class="title">Messages (<a @click="createItem = {}">+</a>)</h1>
             <div v-if="!error">
                 <p class="block" v-if="fetchingDataMessage">{{fetchingDataMessage}}</p>
                 <table class="table is-fullwidth">
                     <tr>
                         <td v-for="key in displayFields" :key="key">{{key}}</td>
+                        <td>Actions</td>
                     </tr>
                     <tr v-for="item in items" :key="item.id">
                         <td v-for="key in displayFields" :key="key">{{item[key]}}</td>
+                        <td>
+                            <a @click="onEditItem(item)">Edit</a>
+                            <a @click="deleteItem = item">Delete</a>
+                            <a @click="onViewItem(item)">Details</a>
+                        </td>
                     </tr>
                 </table>
             </div>
             <div class="notification is-danger" v-else>{{error}}</div>
+
+            <div v-if="createItem">
+                <ui-modal-popup @close="createItem = null">
+                    <h1 class="title">New</h1>
+                    <table class="is-fullwidth">
+                        <tr>
+                            <td>Name</td><td><input class="input" v-model="createItem.name"></td>
+                        </tr>
+                        <tr>
+                            <td>Email</td><td><input class="input" v-model="createItem.email"></td>
+                        </tr>
+                        <tr>
+                            <td>Message</td><td><textarea class="textarea" v-model="createItem.message"></textarea></td>
+                        </tr>
+                    </table>
+                    <div class="buttons">
+                        <button class="button is-primary" @click="onCreateItem">Create</button>
+                        <button class="button" @click="createItem = null">Cancel</button>
+                    </div>
+                </ui-modal-popup>
+            </div>
+
+            <div v-if="editItem">
+                <ui-modal-popup @close="editItem = null">
+                    <h1 class="title">Edit</h1>
+                    <table class="is-fullwidth">
+                        <tr>
+                            <td>Name</td><td><input class="input" v-model="editItem.name"></td>
+                        </tr>
+                        <tr>
+                            <td>Email</td><td><input class="input" v-model="editItem.email"></td>
+                        </tr>
+                        <tr>
+                            <td>Message</td><td><textarea class="textarea" v-model="editItem.message"></textarea></td>
+                        </tr>
+                    </table>
+                    <div class="buttons">
+                        <button class="button is-primary" @click="onSaveEditItem">Save</button>
+                        <button class="button" @click="editItem = null">Cancel</button>
+                    </div>
+                </ui-modal-popup>
+            </div>
+
+            <div v-if="viewItem">
+                <ui-modal-popup @close="viewItem = null">
+                    <h1 class="title">Details</h1>
+                    <table class="table is-fullwidth">
+                        <tr>
+                            <td>Name</td><td>{{viewItem.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td><td>{{viewItem.email}}</td>
+                        </tr>
+                        <tr>
+                            <td>Message</td><td>{{viewItem.message}}</td>
+                        </tr>
+                    </table>
+                </ui-modal-popup>
+            </div>
+
+            <div v-if="deleteItem">
+                <ui-modal-popup @close="deleteItem = null">
+                    <p class="block">Are you sure you want to delete item: <b>{{deleteItem.name}}</b>?</p>
+                    <div class="buttons">
+                        <button class="button is-danger" @click="onDeleteItem">Confirm</button>
+                        <button class="button" @click="deleteItem = null">Cancel</button>
+                    </div>
+                </ui-modal-popup>
+            </div>
         </div>
     </div>
 </div>
+
+<template id="ui-modal-popup">
+    <div class="modal" :class="{'is-active': active}">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box">
+                <slot></slot>
+            </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close" @click="close"></button>
+    </div>
+</template>
+
 <script>
-    new Vue({
+    let UiModalPopup = {
+        template: '#ui-modal-popup',
         data() {
             return {
-                envName: '',
+                active: true
+            }
+        },
+        methods: {
+            close() {
+                this.active = undefined;
+                this.$emit('close');
+            }
+        }
+    };
+    new Vue({
+        components: {
+            'ui-modal-popup': UiModalPopup
+        },
+        data() {
+            return {
+                endpointUrl: '/messages',
                 fetchingDataMessage: 'Fetching data',
+                displayFields: ['name', 'email'],
                 error: null,
                 items: null,
-                displayFields: [
-                    'name', 'email', 'message'
-                ],
+                totalCount: null,
+                viewItem: null,
+                deleteItem: null,
+                editItem: null,
+                createItem: null,
             }
         },
         created() {
-            let endpointUrl = '/messages';
-            fetch(endpointUrl).then(resp => resp.json()).then(data => {
+            fetch(this.endpointUrl).then(resp => resp.json()).then(data => {
                 console.log("Received ", data);
-                this.envName = data.envName;
                 this.items = data.items;
+                this.totalCount = data.count;
                 if (this.items.length <= 0) {
                     this.fetchingDataMessage = 'There is no data.';
                 } else {
                     this.fetchingDataMessage = null;
                 }
             }).catch(error => {
-                console.error("Failed to get " + endpointUrl, error);
-                this.error = `Failed to get ${endpointUrl} from server. Is it running?`;
+                console.error("Failed to get " + this.endpointUrl, error);
+                this.error = `Failed to get ${this.endpointUrl} from server. Is it running?`;
             });
+        },
+        methods: {
+            onCreateItem() {
+                console.log("Creating message.name=" + this.createItem.name);
+                let options = {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.createItem)
+                };
+                fetch(this.endpointUrl, options).then(resp => resp.json()).then(data => {
+                    console.log("Received ", data);
+                    this.items.push(data);
+                    this.createItem = null;
+                });
+            },
+            onEditItem(item) {
+                console.log("Getting message.id=" + item.id);
+                fetch(this.endpointUrl + '/' + item.id).then(resp => resp.json()).then(data => {
+                    console.log("Received ", data);
+                    this.editItem = data;
+                });
+            },
+            onSaveEditItem() {
+                let id = this.editItem.id;
+                console.log("Saving message.id=" + id);
+                let options = {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.editItem)
+                };
+                fetch(this.endpointUrl, options).then(resp => resp.json()).then(data => {
+                    console.log("Received ", data);
+                    let index = this.items.findIndex(e => e.id === id);
+                    this.items.splice(index, 1, data);
+                    this.editItem = null;
+                });
+            },
+            onViewItem(item) {
+                console.log("Getting message.id=" + item.id);
+                fetch(this.endpointUrl + '/' + item.id).then(resp => resp.json()).then(data => {
+                    console.log("Received ", data);
+                    this.viewItem = data;
+                });
+            },
+            onDeleteItem() {
+                let id = this.deleteItem.id;
+                console.log("Deleting message.id=" + id);
+                let options = {
+                    method: "DELETE",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: id
+                    })
+                };
+                fetch(this.endpointUrl, options).then(resp => resp.json()).then(data => {
+                    console.log("Received ", data);
+                    let index = this.items.findIndex(e => e.id === id);
+                    this.items.splice(index, 1);
+                    this.deleteItem = null;
+                });
+            }
         }
     }).$mount('#app');
 </script>
